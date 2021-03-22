@@ -1,1 +1,0 @@
-exec echo "$GIT_PASSWORD"
