@@ -1,6 +1,5 @@
 model/**
 datasets/**
 .vscode
-__pycache__
 init.ipynb
 .deepnote
