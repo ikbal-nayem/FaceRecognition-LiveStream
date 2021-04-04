@@ -1,24 +1,33 @@
-from flask import Flask, request
-from FaceRecognition import applyWithURL, applyWithImg
-
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def recognizer():
-    if request.method == "POST":
-        if request.is_json:
-            url = request.get_json().get('url', False)
-            faces = applyWithURL(url) if url else {'success': False,'message': "Image url not provided into 'url'"}
-            return(faces)
-        elif request.files:
-            img = request.files.get('image', False)
-            faces = applyWithImg(img) if img else {'success': False,'message': "Image wasn't provided into 'image'"}
-            return(faces)
-        else:
-            return({'success': False, 'message': 'Request data should be in JSON format'})
-    else:
-        return("Get request")
+import cv2
+import requests
+import time
+from Recognition import recognize_cv2
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+capture = cv2.VideoCapture(0)
+capture.set(3, 720)
+capture.set(4, 480)
+pTime = 0
+while True:
+    check, frame = capture.read()
+    faces = recognize_cv2(frame)
+    if len(faces['faces']) > 0:
+      for face in faces['faces']:
+        top = int(face['bounding_box']['top'])
+        bottom = int(face['bounding_box']['bottom'])
+        left = int(face['bounding_box']['left'])
+        right = int(face['bounding_box']['right'])
+        cv2.rectangle(frame, (left, top), (right, bottom), (100, 255, 0), 1)
+        confidence = int(face['top_prediction']['confidence']*100)
+        face_label = str(f"{face['top_prediction']['label']} ({confidence})") if confidence>90 else "?"
+        cv2.putText(frame, face_label, (left, top), cv2.LINE_AA, .5, (100,0,200), 2)
+    cTime = time.time()
+    fps = int(1/(cTime-pTime))
+    pTime = cTime
+    cv2.putText(frame, f"fps: {fps}", (40, 40), cv2.LINE_AA, .5, (100,100,20), 2)
+    cv2.imshow('Camera Output', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+      break
+
+capture.release()
+cv2.destroyAllWindows()
