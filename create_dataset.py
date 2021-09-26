@@ -9,7 +9,7 @@ DATASET_PATH = os.path.join("datasets", name)
 if not os.path.isdir(DATASET_PATH):
   os.mkdir(DATASET_PATH)
 
-mtcnn = MTCNN(prewhiten=False, keep_all=True, thresholds=[0.6, 0.7, 0.9])
+mtcnn = MTCNN(keep_all=True, thresholds=[0.6, 0.7, 0.9])
 
 image_no = 0
 capture = cv2.VideoCapture(0)
@@ -19,14 +19,14 @@ while True:
   check, frame = capture.read()
   frame = cv2.resize(frame, (400, 300))
   faces, _ = mtcnn.detect(Image.fromarray(frame))
-  if faces is not None and count%7 == 0:
+  if faces is not None and count%7 == 0 and len(faces)==1:
     image_no += 1
     cv2.imwrite(os.path.join(DATASET_PATH, f"{name}_{image_no}.jpg"), frame)
     if image_no == 100:
       break
 
   image_text = f"Number of image taken {image_no} for {name}"
-  cv2.putText(frame, image_text, (20, 20), cv2.LINE_AA, .5, (100,0,200), 1)
+  cv2.putText(frame, image_text, (20, 20), cv2.LINE_AA, .8, (100,0,200), 1)
   if faces is not None:
     for (x, y, w, h) in faces:
       x, y, w, h = int(x), int(y), int(w), int(h)

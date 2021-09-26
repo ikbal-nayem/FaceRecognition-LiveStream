@@ -1,9 +1,14 @@
-facenet_pytorch==0.1.0
-torch==1.2.0
-torchvision==0.4.0
-numpy==1.16.5
-Pillow==6.1.0
-joblib==0.13.2
-scikit_learn==0.21.3
+-f https://download.pytorch.org/whl/torch_stable.html
+
+facenet_pytorch
+torch==1.9.0+cpu
+torchvision==0.10.0+cpu
+opencv-python
+cython
+numpy
+Pillow
+joblib
+scikit_learn
 scikit-image
-Werkzeug==0.15.2
+Werkzeug
+Pyrebase4

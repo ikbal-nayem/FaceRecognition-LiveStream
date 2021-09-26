@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 from face_recognition import preprocessing, FaceFeaturesExtractor, FaceRecogniser
 
-MODEL_DIR_PATH = 'model_test'
+MODEL_DIR_PATH = 'model'
 DATASET_PATH = 'datasets'
 
 def dataset_to_embeddings(dataset, features_extractor):
