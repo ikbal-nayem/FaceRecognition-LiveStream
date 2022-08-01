@@ -7,7 +7,8 @@ from face_recognition import preprocessing
 
 
 file_loc = os.path.dirname(os.path.abspath(__file__))
-face_recogniser = joblib.load(os.path.join(file_loc, 'model', 'face_recogniser.pkl'))
+face_recogniser = joblib.load(os.path.join(
+    file_loc, 'model', 'pretrainedModel.pkl'))
 preprocess = preprocessing.ExifOrientationNormalize()
 
 
